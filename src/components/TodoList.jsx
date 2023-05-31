@@ -1,10 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { addTodo, deleteTodo, fetchTodos } from '../store/todoReducer';
+import { fetchTodos, addTodo, deleteTodo } from '../store/todoReducer';
+import '../App.css';
 
-export default function TodoList() {
+const TodoList = () => {
     const [newTodo, setNewTodo] = useState('');
-    const todos = useSelector((state) => state.todos);
+    const todos = useSelector((state) => state.todos.todos);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,21 +24,23 @@ export default function TodoList() {
     };
 
     const clickDeleteTodo = (todo) => {
-        dispatch(deleteTodo(todo.id));
+        dispatch(deleteTodo(todo));
     };
 
     return (
-        <div>
-            <h4>TodoList</h4>
-            <input type="text" onChange={inputTodo} value={newTodo} />
-            <button onClick={sendForm}>Добавить</button>
+        <div className="wrapper">
+            <h2>TodoList</h2>
+            <input type="text" onChange={inputTodo} value={newTodo} placeholder="Add new Todo..." />
+            <button className="btn" onClick={sendForm}>
+                Добавить
+            </button>
 
             <div>
                 {todos && (
                     <ul>
-                        {todos.map((todo) => (
-                            <li key={todo.id} onClick={() => clickDeleteTodo(todo)}>
-                                {todo.title}
+                        {todos.map((t) => (
+                            <li key={t.id} onClick={() => clickDeleteTodo(t)}>
+                                {t.title}
                             </li>
                         ))}
                     </ul>
@@ -45,4 +48,6 @@ export default function TodoList() {
             </div>
         </div>
     );
-}
+};
+
+export default TodoList;
